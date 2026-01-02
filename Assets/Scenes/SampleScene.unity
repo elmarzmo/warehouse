@@ -175,7 +175,7 @@ CapsuleCollider:
   m_Radius: 0.2
   m_Height: 0.4
   m_Direction: 0
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &166746324
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -401,7 +401,7 @@ CapsuleCollider:
   m_Radius: 0.2
   m_Height: 0.4
   m_Direction: 0
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &328266580
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -891,7 +891,7 @@ CapsuleCollider:
   m_Radius: 0.2
   m_Height: 0.4
   m_Direction: 0
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &655661346
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1216,7 +1216,7 @@ Transform:
   m_GameObject: {fileID: 872853810}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.7130711, z: -0, w: 0.7010918}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 50, y: 1, z: 50}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1390,7 +1390,7 @@ CapsuleCollider:
   m_Radius: 0.2
   m_Height: 0.4
   m_Direction: 0
-  m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!23 &1266624541
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -1853,8 +1853,8 @@ Rigidbody:
   m_GameObject: {fileID: 2111914979}
   serializedVersion: 5
   m_Mass: 1500
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
+  m_LinearDamping: 0.5
+  m_AngularDamping: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -1880,7 +1880,7 @@ Transform:
   m_GameObject: {fileID: 2111914979}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
