@@ -1,87 +1,53 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class ForkliftController : MonoBehaviour
 {
-    [Header("Movement")]
-    public float motorForce = 8000f;
+    public float acceleration = 4f;
     public float maxSpeed = 6f;
-    public float brakeForce = 12000f;
+    public float braking = 8f;
+    public float steeringSpeed = 90f; // degrees per second
 
-    [Header("Steering")]
-    public float maxSteerAngle = 25f;
-    public float steeringTorque = 2500f;
-
-    [Header("Stability")]
-    public float downForce = 5000f;
-
+    float currentSpeed;
     Rigidbody rb;
-    float steerInput;
-    float moveInput;
+    Vector3 movementInput;
 
-    void Awake()
+    void Start()
     {
         rb = GetComponent<Rigidbody>();
-        rb.centerOfMass = new Vector3(0, -0.4f, -0.2f);
+        rb.constraints = RigidbodyConstraints.FreezeRotationX |
+                         RigidbodyConstraints.FreezeRotationZ;
     }
+
+    void Update()
+    {
+        float forward = Input.GetAxis("Vertical");
+        float steer = Input.GetAxis("Horizontal");
+
+        // Acceleration & braking
+        if (Mathf.Abs(forward) > 0.01f)
+        {
+            currentSpeed += forward * acceleration * Time.deltaTime;
+        }
+        else
+        {
+            currentSpeed = Mathf.MoveTowards(currentSpeed, 0f, braking * Time.deltaTime);
+        }
+
+        currentSpeed = Mathf.Clamp(currentSpeed, -maxSpeed, maxSpeed);
+
+        // Steering only when moving
+        if (Mathf.Abs(currentSpeed) > 0.2f)
+        {
+            float turn = steer * steeringSpeed * Time.deltaTime;
+            rb.MoveRotation(rb.rotation * Quaternion.Euler(0f, turn, 0f));
+        }
+
+        movementInput = transform.forward * currentSpeed;
+    }
+
     void FixedUpdate()
     {
-        GetInput();
-        ApllyDownForce();
-        HandleMovement();
-        HandleSteering();
-        LimitSpeed();
-        
-
-
-    }
-
-    void GetInput()
-    {
-        steerInput = Input.GetAxis("Horizontal");
-        moveInput = Input.GetAxis("Vertical");
-
-        if (Mathf.Abs(moveInput) > 0.01f || Mathf.Abs(steerInput) > 0.01f)
-        {
-            Debug.Log($"Move: {moveInput}, Steer: {steerInput}");
-        }
-    }
-    void HandleMovement()
-    {
-        Vector3 force = transform.forward * moveInput * motorForce * Time.fixedDeltaTime;
-
-        if(rb.linearVelocity.magnitude < maxSpeed)
-        {
-            rb.AddForce(force, ForceMode.Acceleration);
-        }
-
-        //braking
-        if (Input.GetKey(KeyCode.Space))
-        {
-            if (rb.linearVelocity.magnitude > 0.1f)
-            {
-                rb.AddForce(-rb.linearVelocity.normalized * brakeForce * Time.fixedDeltaTime, ForceMode.Force);
-            }
-
-        }
-    }
-
-    void HandleSteering()
-    {
-        if (Mathf.Abs(steerInput) < 0.1f) return;
-        
-        float turnStength = steerInput * steeringTorque * Time.fixedDeltaTime;
-        rb.AddTorque(Vector3.up*turnStength, ForceMode.Force);
-    }
-    void LimitSpeed()
-    {
-        if (rb.linearVelocity.magnitude > maxSpeed)
-        {
-            rb.linearVelocity = rb.linearVelocity.normalized * maxSpeed;
-        }
-    }
-    void ApllyDownForce()
-    {
-        rb.AddForce(Vector3.down*downForce*Time.fixedDeltaTime);
-            
+        rb.MovePosition(rb.position + movementInput * Time.fixedDeltaTime);
     }
 }
