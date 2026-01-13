@@ -32,6 +32,9 @@ public class ForkliftController : MonoBehaviour
         HandleMovement();
         HandleSteering();
         LimitSpeed();
+
+        if (rb.velocity.y > 1f)
+            rb.velocity = new Vector3(rb.velocity.x, 0f, rb.velocity.z);
     }
 
     void HandleMovement()
@@ -48,10 +51,13 @@ public class ForkliftController : MonoBehaviour
 
     void HandleSteering()
     {
-        if (rb.velocity.magnitude < 0.2f) return;
+        if (Mathf.Abs(forwardInput) < 0.1f) return;
 
-        float turn = steerInput * steeringSpeed * Time.fixedDeltaTime;
-        rb.MoveRotation(rb.rotation * Quaternion.Euler(0f, turn, 0f));
+        float speedFactor = Mathf.Clamp01(rb.velocity.magnitude / maxSpeed);
+        float turnAmount = steerInput * steeringSpeed * speedFactor * Time.fixedDeltaTime;
+
+        Quaternion turnRotation = Quaternion.Euler(0f, turnAmount, 0f);
+        rb.MoveRotation(rb.rotation * turnRotation);
     }
 
     void LimitSpeed()
@@ -67,9 +73,9 @@ public class ForkliftController : MonoBehaviour
 
     void ApplyDownForce()
     {
-        if (rb.velocity.magnitude > 0.1f)
-        {
-            rb.AddForce(Vector3.down * downForce, ForceMode.Force);
-        }
+        
+        
+        rb.AddForce(Vector3.down * downForce, ForceMode.Force);
+        
     }
 }

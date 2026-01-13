@@ -5685,7 +5685,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2111914979}
   serializedVersion: 5
-  m_Mass: 1500
+  m_Mass: 800
   m_LinearDamping: 0.5
   m_AngularDamping: 3.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -5773,10 +5773,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bc997a198e055b49a4e5e3cfe5a1be0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ForkliftController
-  acceleration: 4
+  motorForce: 18000
   maxSpeed: 6
   braking: 8
   steeringSpeed: 90
+  downForce: 3000
 --- !u!114 &2111914985
 MonoBehaviour:
   m_ObjectHideFlags: 0
