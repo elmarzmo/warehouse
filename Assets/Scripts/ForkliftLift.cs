@@ -4,7 +4,7 @@ public class ForkliftLift : MonoBehaviour
 {
     [Header("Lift Settings")]
     public float liftSpeed = 1.2f;
-    public float minHeight = 0.2f;
+    public float minHeight = 0.1f;
     public float maxHeight = 2.5f;
 
     Vector3 startLocalPos;
