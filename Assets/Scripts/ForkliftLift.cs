@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class ForkliftLift : MonoBehaviour
 {
-    [Header("Lift Settings")]
-    public float liftSpeed = 1.2f;
-    public float minHeight = 0.1f;
-    public float maxHeight = 2.5f;
+    public float liftSpeed = 1.5f;
+    public float maxLiftOffset = 1.8f; // how high forks can go from start
 
-    Vector3 startLocalPos;
+    float startY;
+    float minHeight;
+    float maxHeight;
 
     void Start()
     {
-        startLocalPos = transform.localPosition;
+        // Record the correct resting position
+        startY = transform.localPosition.y;
+        minHeight = startY;
+        maxHeight = startY + maxLiftOffset;
     }
 
     void Update()
@@ -21,17 +24,10 @@ public class ForkliftLift : MonoBehaviour
         if (Input.GetKey(KeyCode.R)) input = 1f;
         if (Input.GetKey(KeyCode.F)) input = -1f;
 
-        if (Mathf.Abs(input) < 0.01f) return;
-
         Vector3 pos = transform.localPosition;
         pos.y += input * liftSpeed * Time.deltaTime;
-
-        float minY = startLocalPos.y + minHeight;
-        float maxY = startLocalPos.y + maxHeight;
-
-        pos.y = Mathf.Clamp(pos.y, minY, maxY);
+        pos.y = Mathf.Clamp(pos.y, minHeight, maxHeight);
 
         transform.localPosition = pos;
     }
 }
-
