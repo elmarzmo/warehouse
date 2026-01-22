@@ -6,56 +6,48 @@ public class ForkliftPalletHandler : MonoBehaviour
     public KeyCode pickupKey = KeyCode.E;
     public KeyCode releaseKey = KeyCode.Q;
 
-    GameObject currentPallet;
+    Rigidbody carriedPallet;
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(pickupKey) && carriedPallet == null)
         {
-            Debug.Log("E pressed");
-        }
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            Debug.Log("Q pressed");
+            TryPickup();
         }
 
-        if (Input.GetKeyDown(pickupKey) && currentPallet)
+        if (Input.GetKeyDown(releaseKey) && carriedPallet != null)
         {
-            PickupPallet();
-        }
-
-        if (Input.GetKeyDown(releaseKey) && currentPallet)
-        {
-            ReleasePallet();
+            Release();
         }
     }
 
-    void OnTriggerEnter(Collider other)
+    void TryPickup()
     {
-        if (other.CompareTag("Pallet"))
+        Collider[] hits = Physics.OverlapSphere(
+            palletHoldPoint.position,
+            0.35f
+        );
+
+        foreach (Collider hit in hits)
         {
-            currentPallet = other.gameObject;
+            if (!hit.CompareTag("Pallet")) continue;
+
+            Rigidbody rb = hit.attachedRigidbody;
+            if (!rb) continue;
+
+            carriedPallet = rb;
+            rb.isKinematic = true;
+            rb.transform.SetParent(palletHoldPoint);
+            rb.transform.localPosition = Vector3.zero;
+            rb.transform.localRotation = Quaternion.identity;
+            break;
         }
     }
 
-    void OnTriggerExit(Collider other)
+    void Release()
     {
-        if (other.CompareTag("Pallet"))
-        {
-            if (currentPallet == other.gameObject)
-                currentPallet = null;
-        }
-    }
-
-    void PickupPallet()
-    {
-        currentPallet.transform.SetParent(palletHoldPoint);
-        currentPallet.transform.localPosition = Vector3.zero;
-    }
-
-    void ReleasePallet()
-    {
-        currentPallet.transform.SetParent(null);
-        currentPallet = null;
+        carriedPallet.transform.SetParent(null);
+        carriedPallet.isKinematic = false;
+        carriedPallet = null;
     }
 }
